@@ -1,0 +1,158 @@
+{
+  "settings": {
+    "checkIntervalSeconds": 25,
+    "jitterSeconds": 10,
+    "maxPriceEur": 60.0,
+    "enableSoundAlert": true,
+    "enableWindowsPopup": true,
+    "autoOpenBrowser": true,
+    "discordWebhookUrl": "",
+    "cooldownMinutesPerItem": 15
+  },
+  "series": [
+    {
+      "id": "flammes-fantasmagoriques",
+      "name": "ETB Flammes Fantasmagoriques",
+      "enabled": true,
+      "keywords": [
+        "flammes fantasmagoriques",
+        "flamme fantasmagorique",
+        "fantasmagoriques"
+      ],
+      "requiredKeywords": [
+        "coffret dresseur d'élite",
+        "coffret dresseur d'elite",
+        "etb",
+        "elite trainer box"
+      ],
+      "maxPrice": 60.0
+    },
+    {
+      "id": "regne-delta",
+      "name": "ETB Règne Delta",
+      "enabled": true,
+      "keywords": [
+        "règne delta",
+        "regne delta"
+      ],
+      "requiredKeywords": [
+        "coffret dresseur d'élite",
+        "coffret dresseur d'elite",
+        "etb",
+        "elite trainer box"
+      ],
+      "maxPrice": 60.0
+    },
+    {
+      "id": "30-ans",
+      "name": "ETB Pokémon 30 Ans",
+      "enabled": true,
+      "keywords": [
+        "30 ans",
+        "30e anniversaire",
+        "30ème anniversaire",
+        "30th anniversary",
+        "célébrations 30"
+      ],
+      "requiredKeywords": [
+        "coffret dresseur d'élite",
+        "coffret dresseur d'elite",
+        "etb",
+        "elite trainer box",
+        "coffret 30 ans"
+      ],
+      "maxPrice": 60.0
+    }
+  ],
+  "directUrls": [
+    {
+      "name": "Exemple - Ajoute ici les liens directs des fiches produits dès qu'elles sont créées",
+      "store": "Fnac / Smyths / Cultura / Amazon",
+      "url": "",
+      "maxPrice": 60.0,
+      "enabled": false
+    }
+  ],
+  "stores": [
+    {
+      "id": "smythstoys",
+      "name": "Smyths Toys FR",
+      "enabled": true,
+      "searchUrlTemplate": "https://www.smythstoys.com/fr/fr-fr/search/?text={query}",
+      "inStockPatterns": ["Ajouter au panier", "En stock", "addToCartButton", "Click & Collect", "Disponible en magasin"],
+      "outOfStockPatterns": ["Rupture de stock", "Indisponible", "Bientôt disponible"]
+    },
+    {
+      "id": "kingjouet",
+      "name": "King Jouet",
+      "enabled": true,
+      "searchUrlTemplate": "https://www.king-jouet.com/jeux-jouets/recherche/resultats.htm?texte={query}",
+      "inStockPatterns": ["Ajouter au panier", "En stock", "Retrait 2h", "Disponible en magasin"],
+      "outOfStockPatterns": ["Indisponible", "Épuisé"]
+    },
+    {
+      "id": "joueclub",
+      "name": "JouéClub",
+      "enabled": true,
+      "searchUrlTemplate": "https://www.joueclub.fr/recherche?q={query}",
+      "inStockPatterns": ["Ajouter au panier", "Disponible en ligne", "Retrait en magasin", "Drive"],
+      "outOfStockPatterns": ["Indisponible en ligne", "Rupture"]
+    },
+    {
+      "id": "micromania",
+      "name": "Micromania",
+      "enabled": true,
+      "searchUrlTemplate": "https://www.micromania.fr/on/demandware.store/Sites-Micromania-Site/default/Search-Show?q={query}",
+      "inStockPatterns": ["Ajouter au panier", "Précommander", "Retrait 1h", "Disponible en magasin"],
+      "outOfStockPatterns": ["Indisponible", "Épuisé", "Victime de son succès"]
+    },
+    {
+      "id": "fnac",
+      "name": "Fnac",
+      "enabled": true,
+      "searchUrlTemplate": "https://www.fnac.com/SearchResult/ResultList.aspx?Search={query}&sft=1&sa=0",
+      "inStockPatterns": ["Ajouter au panier", "En stock en ligne", "Précommander", "Retrait 1h", "En stock en magasin"],
+      "outOfStockPatterns": ["Indisponible en ligne", "Article épuisé"]
+    },
+    {
+      "id": "cultura",
+      "name": "Cultura",
+      "enabled": true,
+      "searchUrlTemplate": "https://www.cultura.com/search/results?search_query={query}",
+      "inStockPatterns": ["Ajouter au panier", "En stock", "Retrait en magasin", "Disponible dans votre magasin"],
+      "outOfStockPatterns": ["Indisponible", "Rupture de stock", "Alerte disponibilité"]
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon FR (Vendu par Amazon)",
+      "enabled": true,
+      "searchUrlTemplate": "https://www.amazon.fr/s?k={query}&rh=p_6%3AA1X6FK5RDHNB96",
+      "inStockPatterns": ["Ajouter au panier", "Expédié et vendu par Amazon"],
+      "outOfStockPatterns": ["Actuellement indisponible", "Temporairement en rupture de stock"]
+    },
+    {
+      "id": "leclerc",
+      "name": "E.Leclerc",
+      "enabled": true,
+      "searchUrlTemplate": "https://www.e.leclerc/recherche?q={query}",
+      "inStockPatterns": ["Ajouter au panier", "En stock"],
+      "outOfStockPatterns": ["Indisponible", "Rupture"]
+    },
+    {
+      "id": "auchan",
+      "name": "Auchan",
+      "enabled": true,
+      "searchUrlTemplate": "https://www.auchan.fr/recherche?text={query}",
+      "inStockPatterns": ["Ajouter au panier", "Disponible"],
+      "outOfStockPatterns": ["Indisponible", "Épuisé"]
+    },
+    {
+      "id": "carrefour",
+      "name": "Carrefour",
+      "enabled": true,
+      "searchUrlTemplate": "https://www.carrefour.fr/s?q={query}",
+      "inStockPatterns": ["Ajouter au panier", "Acheter"],
+      "outOfStockPatterns": ["Indisponible", "Rupture de stock"]
+    }
+  ]
+}
