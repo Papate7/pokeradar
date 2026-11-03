@@ -9,13 +9,21 @@ jobs:
   check-status:
     runs-on: ubuntu-latest
     steps:
-      - name: Run Cloud Scanner
+      - name: Install Cloud Browser (Playwright Firefox)
+        run: |
+          npm init -y
+          npm install playwright
+          npx playwright install --with-deps firefox
+
+      - name: Run Cloud Browser & AI Vision Scanner
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           EVENT_NAME: ${{ github.event_name }}
         run: |
           cat << 'EOF' > scanner.mjs
+          import { firefox } from "playwright";
+
           const MAX_PRICE = 60.0;
           const MIN_PRICE = 35.0;
           const WEBHOOK = process.env.DISCORD_WEBHOOK_URL || "";
@@ -23,6 +31,7 @@ jobs:
           const IS_MANUAL_TEST = process.env.EVENT_NAME === "workflow_dispatch";
           const decode = (b) => Buffer.from(b, "base64").toString("utf8");
 
+          // Reims, Cormontreuil, Laon, Chambry (encodés pour rester invisibles sur GitHub)
           const LOCAL_CITIES = decode("cmVpbXMsY29ybW9udHJldWlsLGxhb24sY2hhbWJyeQ==").split(",");
           const SOCIAL_TARGETS = [
             { name: decode("Qm91dGlxdWUgTG9jYWxlIChGYWNlYm9vayk="), url: decode("aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL2dlZWtldG15c3RlcmUv") },
@@ -30,31 +39,40 @@ jobs:
           ];
 
           const TARGETS = [
+            // 1. Flammes Fantasmagoriques
             { series: "ETB Flammes Fantasmagoriques", store: "Smyths Toys", url: "https://www.smythstoys.com/fr/fr-fr/search/?text=Pokemon+ETB+Flammes+Fantasmagoriques", kw: ["flammes fantasmagoriques", "fantasmagoriques"] },
             { series: "ETB Flammes Fantasmagoriques", store: "King Jouet", url: "https://www.king-jouet.com/jeux-jouets/recherche/resultats.htm?texte=Pokemon+ETB+Flammes+Fantasmagoriques", kw: ["flammes fantasmagoriques", "fantasmagoriques"] },
             { series: "ETB Flammes Fantasmagoriques", store: "Cultura", url: "https://www.cultura.com/search/results?search_query=Pokemon+ETB+Flammes+Fantasmagoriques", kw: ["flammes fantasmagoriques", "fantasmagoriques"] },
             { series: "ETB Flammes Fantasmagoriques", store: "JouéClub", url: "https://www.joueclub.fr/recherche?q=Pokemon+ETB+Flammes+Fantasmagoriques", kw: ["flammes fantasmagoriques", "fantasmagoriques"] },
             { series: "ETB Flammes Fantasmagoriques", store: "Fnac", url: "https://www.fnac.com/SearchResult/ResultList.aspx?Search=Pokemon+ETB+Flammes+Fantasmagoriques&sft=1&sa=0", kw: ["flammes fantasmagoriques", "fantasmagoriques"] },
+            { series: "ETB Flammes Fantasmagoriques", store: "Micromania", url: "https://www.micromania.fr/on/demandware.store/Sites-Micromania-Site/default/Search-Show?q=Pokemon+ETB+Flammes+Fantasmagoriques", kw: ["flammes fantasmagoriques", "fantasmagoriques"] },
+            { series: "ETB Flammes Fantasmagoriques", store: "E.Leclerc", url: "https://www.e.leclerc/recherche?q=Pokemon+ETB+Flammes+Fantasmagoriques", kw: ["flammes fantasmagoriques", "fantasmagoriques"] },
             { series: "ETB Flammes Fantasmagoriques", store: "Amazon Officiel", url: "https://www.amazon.fr/s?k=Pokemon+ETB+Flammes+Fantasmagoriques&rh=p_6%3AA1X6FK5RDHNB96", kw: ["flammes fantasmagoriques", "fantasmagoriques"] },
+
+            // 2. Règne Delta
             { series: "ETB Règne Delta", store: "Smyths Toys", url: "https://www.smythstoys.com/fr/fr-fr/search/?text=Pokemon+ETB+Regne+Delta", kw: ["règne delta", "regne delta"] },
             { series: "ETB Règne Delta", store: "King Jouet", url: "https://www.king-jouet.com/jeux-jouets/recherche/resultats.htm?texte=Pokemon+ETB+Regne+Delta", kw: ["règne delta", "regne delta"] },
             { series: "ETB Règne Delta", store: "Cultura", url: "https://www.cultura.com/search/results?search_query=Pokemon+ETB+Regne+Delta", kw: ["règne delta", "regne delta"] },
             { series: "ETB Règne Delta", store: "Fnac", url: "https://www.fnac.com/SearchResult/ResultList.aspx?Search=Pokemon+ETB+Regne+Delta&sft=1&sa=0", kw: ["règne delta", "regne delta"] },
+            { series: "ETB Règne Delta", store: "Micromania", url: "https://www.micromania.fr/on/demandware.store/Sites-Micromania-Site/default/Search-Show?q=Pokemon+ETB+Regne+Delta", kw: ["règne delta", "regne delta"] },
             { series: "ETB Règne Delta", store: "Amazon Officiel", url: "https://www.amazon.fr/s?k=Pokemon+ETB+Regne+Delta&rh=p_6%3AA1X6FK5RDHNB96", kw: ["règne delta", "regne delta"] },
+
+            // 3. Pokémon 30 Ans
             { series: "ETB Pokémon 30 Ans", store: "Smyths Toys", url: "https://www.smythstoys.com/fr/fr-fr/search/?text=Pokemon+Coffret+30+ans", kw: ["30 ans", "30e anniversaire", "30ème anniversaire"] },
             { series: "ETB Pokémon 30 Ans", store: "King Jouet", url: "https://www.king-jouet.com/jeux-jouets/recherche/resultats.htm?texte=Pokemon+Coffret+30+ans", kw: ["30 ans", "30e anniversaire", "30ème anniversaire"] },
             { series: "ETB Pokémon 30 Ans", store: "Cultura", url: "https://www.cultura.com/search/results?search_query=Pokemon+Coffret+30+ans", kw: ["30 ans", "30e anniversaire", "30ème anniversaire"] },
             { series: "ETB Pokémon 30 Ans", store: "Fnac", url: "https://www.fnac.com/SearchResult/ResultList.aspx?Search=Pokemon+Coffret+30+ans&sft=1&sa=0", kw: ["30 ans", "30e anniversaire", "30ème anniversaire"] },
+            { series: "ETB Pokémon 30 Ans", store: "Micromania", url: "https://www.micromania.fr/on/demandware.store/Sites-Micromania-Site/default/Search-Show?q=Pokemon+Coffret+30+ans", kw: ["30 ans", "30e anniversaire", "30ème anniversaire"] },
             { series: "ETB Pokémon 30 Ans", store: "Amazon Officiel", url: "https://www.amazon.fr/s?k=Pokemon+Coffret+30+ans&rh=p_6%3AA1X6FK5RDHNB96", kw: ["30 ans", "30e anniversaire", "30ème anniversaire"] }
           ];
 
           const STOCK_PATTERNS = ["ajouter au panier", "précommander", "en stock en ligne", "retrait 1h", "retrait 2h", "retrait en magasin", "disponible en magasin", "click & collect"];
 
-          function getPrice(html) {
+          function getPrice(text) {
             const r = /(\d{2})[,.](\d{2})\s*(?:€|&euro;|EUR)/gi;
             const p = [];
             let m;
-            while ((m = r.exec(html)) !== null) {
+            while ((m = r.exec(text)) !== null) {
               const v = parseFloat(`${m[1]}.${m[2]}`);
               if (v >= MIN_PRICE && v <= MAX_PRICE) p.push(v);
             }
@@ -66,29 +84,60 @@ jobs:
             await fetch(WEBHOOK, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ username: "PokéRadar Cloud 24/7", content, embeds: embed ? [embed] : [] })
+              body: JSON.stringify({ username: "PokéRadar Cloud PRO 24/7", content, embeds: embed ? [embed] : [] })
             });
+          }
+
+          async function analyzeScreenshotWithGemini(base64Png, pageText) {
+            if (!GEMINI_KEY) return null;
+            try {
+              const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_KEY}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  contents: [{
+                    parts: [
+                      { text: `Regarde cette capture d'écran et ce texte des dernières publications d'une boutique de jeux. Dis uniquement en JSON {"isRestock": true/false, "summary": "..."} si un post récent annonce un arrivage/stock/disponibilité de cartes ou coffrets Pokémon (ETB, Flammes Fantasmagoriques, Règne Delta, 30 ans, etc.). Texte: ${pageText.slice(0, 2000)}` },
+                      { inlineData: { mimeType: "image/png", data: base64Png } }
+                    ]
+                  }],
+                  generationConfig: { responseMimeType: "application/json" }
+                })
+              });
+              if (!resp.ok) return null;
+              const data = await resp.json();
+              return JSON.parse(data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}");
+            } catch (e) {
+              return null;
+            }
           }
 
           async function main() {
             if (IS_MANUAL_TEST && WEBHOOK) {
-              await sendDiscord("✅ **TEST POKÉRADAR CLOUD RÉUSSI !**", {
-                title: "🛡️ Ton Robot Cloud 24/7 est actif (PC Éteint) !",
-                description: "Il scanne désormais toutes les 5 minutes :\n• **Flammes Fantasmagoriques, Règne Delta, 30 Ans** (Max 60 €)\n• **En ligne + Magasins locaux + Analyse IA des posts**",
+              await sendDiscord("✅ **POKÉRADAR CLOUD PRO (VRAI FIREFOX CLOUD + IA VISION) ACTIF !**", {
+                title: "🦊 Serveur Firefox Virtuel + IA Gemini opérationnels (PC Éteint)",
+                description: "Le Cloud ouvre maintenant un vrai navigateur Firefox invisible pour contourner les blocages (Fnac, Micromania, Leclerc, Smyths, King Jouet, Cultura) et prend des captures d'écran analysées par l'IA !",
                 color: 1081344
               });
             }
 
+            const browser = await firefox.launch({ headless: true });
+            const context = await browser.newContext({
+              locale: "fr-FR",
+              userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0"
+            });
+            const page = await context.newPage();
+
             for (const t of TARGETS) {
               try {
-                const res = await fetch(t.url, { headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0" } });
-                if (!res.ok) continue;
-                const html = (await res.text()).toLowerCase();
-                if (!t.kw.some(k => html.includes(k))) continue;
-                const price = getPrice(html);
+                await page.goto(t.url, { waitUntil: "domcontentloaded", timeout: 18000 });
+                await page.waitForTimeout(1500);
+                const bodyText = (await page.evaluate(() => document.body ? document.body.innerText : "")).toLowerCase();
+                if (!t.kw.some(k => bodyText.includes(k))) continue;
+                const price = getPrice(bodyText);
                 if (price === null) continue;
-                const online = STOCK_PATTERNS.some(p => html.includes(p));
-                const city = LOCAL_CITIES.find(c => html.includes(c) && html.includes("en stock"));
+                const online = STOCK_PATTERNS.some(p => bodyText.includes(p));
+                const city = LOCAL_CITIES.find(c => bodyText.includes(c) && bodyText.includes("en stock"));
                 if (online || city) {
                   const mode = city ? `MAGASIN (${city.toUpperCase()})` : "EN LIGNE / CLICK & COLLECT";
                   await sendDiscord(`@everyone 🚨 **STOCK DÉTECTÉ (${mode}) : ${t.series} à ${price.toFixed(2)} € !**`, {
@@ -103,21 +152,24 @@ jobs:
 
             for (const s of SOCIAL_TARGETS) {
               try {
-                const res = await fetch(s.url, { headers: { "User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1)" } });
-                if (!res.ok) continue;
-                const html = await res.text();
-                const d = html.match(/property=["']og:description["']\s+content=["']([^"']+)["']/i);
-                const text = (d ? d[1] : "").toLowerCase();
-                if (["arrivage", "restock", "dispo", "reçu"].some(w => text.includes(w)) && ["pokemon", "pokémon", "etb", "coffret", "flammes", "delta", "30 ans"].some(w => text.includes(w))) {
-                  await sendDiscord(`@everyone 🚨 **NOUVEAU POST D'ARRIVAGE POKÉMON EN BOUTIQUE LOCALE !**`, {
-                    title: `📸 Nouveau post détecté`,
+                await page.goto(s.url, { waitUntil: "domcontentloaded", timeout: 18000 });
+                await page.waitForTimeout(2000);
+                const text = (await page.evaluate(() => document.body ? document.body.innerText : "")).toLowerCase();
+                const screenshotBuf = await page.screenshot({ fullPage: false });
+                const aiRes = await analyzeScreenshotWithGemini(screenshotBuf.toString("base64"), text);
+
+                if (aiRes && aiRes.isRestock) {
+                  await sendDiscord(`@everyone 🚨 **ARRIVAGE POKÉMON DÉTECTÉ PAR L'IA VISION !**`, {
+                    title: `🤖 Analyse IA sur la page de la boutique`,
                     url: s.url,
-                    description: `Extrait : *${text.slice(0, 300)}*\n👉 **[VOIR LE POST](${s.url})**`,
+                    description: `**Ce que l'IA a vu :**\n> ${aiRes.summary}\n👉 **[VOIR LE POST](${s.url})**`,
                     color: 15418782
                   });
                 }
               } catch (e) {}
             }
+
+            await browser.close();
           }
           main();
           EOF
